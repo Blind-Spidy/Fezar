@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fezar | Premium Banana Protein Powder</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fff8d6;
+    }
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+    }
+    .scroll-animate {
+      transition: transform 0.5s ease, opacity 0.5s ease;
+    }
+    .scroll-animate.invisible {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    .scroll-animate.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="text-gray-900 overflow-x-hidden">  <!-- Intro Loader -->  <div id="intro" class="fixed inset-0 bg-yellow-200 z-50 flex items-center justify-center">
+    <img src="https://i.postimg.cc/DZZZ3yPq/Fezar-logo.png" alt="Fezar Logo" class="w-32 h-auto animate-pulse">
+  </div>  <!-- Header -->  <header class="py-4 px-6 flex justify-center items-center relative z-10">
+    <img src="https://i.postimg.cc/DZZZ3yPq/Fezar-logo.png" alt="Fezar Logo" class="w-20 h-auto">
+  </header>  <!-- Hero -->  <section class="bg-yellow-100 py-20 px-6 text-center scroll-animate invisible relative z-10">
+    <h1 class="text-5xl md:text-6xl font-bold text-yellow-900 mb-4">Fezar</h1>
+    <p class="text-lg md:text-xl font-medium text-yellow-800 max-w-2xl mx-auto">The Royal Choice of Health – 100% Banana Protein Powder</p>
+    <div class="mt-8">
+      <button onclick="openOrderBox()" class="bg-yellow-600 hover:bg-yellow-700 text-white py-3 px-6 rounded-full text-lg transition">Order Now</button>
+    </div>
+  </section>  <!-- Feature Boxes -->  <section class="py-16 px-6 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center scroll-animate invisible">
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h3 class="text-xl font-semibold mb-2">For All Ages</h3>
+      <p class="text-gray-700">Fezar is safe and healthy for children, adults, and pregnant women alike.</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h3 class="text-xl font-semibold mb-2">No Additives</h3>
+      <p class="text-gray-700">Pure banana powder with no added sugar, colors, or preservatives.</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h3 class="text-xl font-semibold mb-2">Trusted Ingredients</h3>
+      <p class="text-gray-700">Only ripe bananas from trusted farms, blended with care and quality.</p>
+    </div>
+  </section>  <!-- Feedback -->  <section class="bg-yellow-50 py-16 px-6 text-center scroll-animate invisible">
+    <h2 class="text-3xl font-semibold mb-6">Customer Feedback</h2>
+    <p class="text-gray-600 mb-4 italic">We care about every voice. Let us know your experience with Fezar.</p>
+    <button onclick="openFeedbackPopup()" class="bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-full">Add Feedback</button>
+  </section>  <!-- Contact Us -->  <section class="bg-yellow-100 py-12 px-6 text-center scroll-animate invisible">
+    <h2 class="text-2xl font-semibold mb-4">Contact Us</h2>
+    <div class="flex justify-center gap-8 text-yellow-800 text-xl">
+      <a href="https://instagram.com/fezar.fezar" target="_blank" title="Instagram"><i data-feather="instagram"></i></a>
+      <a href="tel:+919539180405" title="Call"><i data-feather="phone"></i></a>
+      <a href="mailto:fezar2425@gmail.com" title="Email"><i data-feather="mail"></i></a>
+    </div>
+  </section>  <!-- Footer -->  <footer class="text-center py-6 text-sm text-gray-500">
+    <p>&copy; 2025 Fezar. All rights reserved.</p>
+    <p>Made in Malappuram, India | 100% Natural Ingredients | Premium Banana Protein</p>
+  </footer>  <!-- Order Popup -->  <div id="orderBox" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl w-80 text-center">
+      <h3 class="text-xl font-bold mb-4">Contact to Order</h3>
+      <div class="flex justify-around text-yellow-800 text-2xl">
+        <a href="https://instagram.com/fezar.fezar" target="_blank" title="Text Now"><i data-feather="instagram"></i></a>
+        <a href="tel:+919539180405" title="Call Now"><i data-feather="phone"></i></a>
+        <a href="mailto:fezar2425@gmail.com" title="Mail Now"><i data-feather="mail"></i></a>
+      </div>
+      <button onclick="closeOrderBox()" class="mt-4 text-gray-600 hover:text-black text-sm">Close</button>
+    </div>
+  </div>  <!-- Feedback Popup -->  <div id="feedbackPopup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl w-96">
+      <h3 class="text-xl font-semibold mb-4">Add Feedback</h3>
+      <input type="text" id="feedbackName" placeholder="Your Name" class="w-full mb-3 px-4 py-2 border rounded">
+      <textarea id="feedbackText" placeholder="Your Feedback" class="w-full mb-3 px-4 py-2 border rounded"></textarea>
+      <button onclick="submitFeedback()" class="bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-6 rounded-full">Submit</button>
+      <button onclick="closeFeedbackPopup()" class="ml-4 text-sm text-gray-500 hover:text-black">Cancel</button>
+    </div>
+  </div>  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('intro').style.display = 'none';
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+          el.classList.remove('invisible');
+          el.classList.add('visible');
+        });
+        feather.replace();
+      }, 2000);
+    });
+
+    function openOrderBox() {
+      document.getElementById('orderBox').classList.remove('hidden');
+    }
+    function closeOrderBox() {
+      document.getElementById('orderBox').classList.add('hidden');
+    }
+    function openFeedbackPopup() {
+      document.getElementById('feedbackPopup').classList.remove('hidden');
+    }
+    function closeFeedbackPopup() {
+      document.getElementById('feedbackPopup').classList.add('hidden');
+    }
+    function submitFeedback() {
+      const name = document.getElementById('feedbackName').value;
+      const feedback = document.getElementById('feedbackText').value;
+      if (name && feedback) {
+        alert('Thank you for your feedback, ' + name + '!');
+        closeFeedbackPopup();
+      } else {
+        alert('Please fill in both fields.');
+      }
+    }
+  </script></body>
+</html>
