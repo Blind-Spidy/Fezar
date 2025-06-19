@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FEEDBACKS | Fezar</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fff8d6;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+    }
+    .quote-box {
+      background-color: #fff7e6;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .quote-text {
+      font-style: italic;
+      color: #333;
+    }
+    .quote-author {
+      margin-top: 1rem;
+      font-weight: 600;
+      color: #92400e;
+      text-align: center;
+    }
+    footer {
+      margin-top: auto;
+      background: #fff8d6;
+    }
+    #floatingBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 50;
+    }
+  </style>
+</head>
+<body class="px-4 py-6">
+  <header class="flex items-center gap-4 mb-6">
+    <img src="https://i.postimg.cc/DZZZ3yPq/Fezar-logo.png" alt="Fezar Logo" class="w-12 h-auto">
+    <h1 class="text-3xl font-bold text-yellow-900">FEEDBACKS</h1>
+  </header>  <section id="allFeedback" class="space-y-4 mb-20"></section>  <button id="floatingBtn" onclick="openPopup()" class="bg-yellow-600 hover:bg-yellow-700 text-white p-4 rounded-full shadow-lg">
+    <i data-feather="plus"></i>
+  </button>  <footer class="text-center py-6 text-sm text-gray-500">
+    <p>&copy; 2025 Fezar. All rights reserved.</p>
+    <p>Made in Malappuram, India | 100% Natural Ingredients | Premium Banana Protein</p>
+  </footer>  <!-- Feedback Popup -->  <div id="popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-96 max-w-full">
+      <h2 class="text-xl font-bold mb-4">Add Feedback</h2>
+      <input id="nameInput" type="text" placeholder="Your name" class="w-full border px-4 py-2 mb-2 rounded">
+      <textarea id="feedbackInput" placeholder="Your feedback" class="w-full border px-4 py-2 mb-4 rounded"></textarea>
+      <div class="flex justify-between">
+        <button onclick="submitFeedback()" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded">Submit</button>
+        <button onclick="closePopup()" class="text-gray-600 hover:text-black">Cancel</button>
+      </div>
+    </div>
+  </div>  <script>
+    const binId = '6852e5f08960c979a5ac4735';
+    const masterKey = '$2a$10$MUqYJOcR3EgBFDfSAss.Ku2/OaZAatavYTIK1GZRp.u4glSMb5NXK';
+    let feedbackList = [];
+    let currentUser = '';
+
+    async function fetchFeedback() {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+        headers: {
+          'X-Master-Key': masterKey
+        }
+      });
+      const json = await res.json();
+      feedbackList = json.record || [];
+      renderFeedback();
+    }
+
+    function renderFeedback() {
+      const container = document.getElementById('allFeedback');
+      container.innerHTML = feedbackList.map((f, index) => `
+        <div class='quote-box'>
+          <p class='quote-text'>"${f.feedback}"</p>
+          <p class='quote-author'>– ${f.name || 'Anonymous'}</p>
+          ${f.name === currentUser ? `
+            <div class="flex gap-2 justify-center mt-2">
+              <button onclick="editFeedback(${index})" class="text-blue-600"><i data-feather="edit"></i></button>
+              <button onclick="deleteFeedback(${index})" class="text-red-600"><i data-feather="trash"></i></button>
+            </div>` : ''}
+        </div>
+      `).join('');
+      feather.replace();
+    }
+
+    async function submitFeedback() {
+      const text = document.getElementById('feedbackInput').value.trim();
+      const name = document.getElementById('nameInput').value.trim() || 'Anonymous';
+      if (!text) return alert('Please enter feedback');
+      currentUser = name;
+      feedbackList.push({ name, feedback: text });
+      await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': masterKey
+        },
+        body: JSON.stringify(feedbackList)
+      });
+      closePopup();
+      alert('Feedback submitted successfully!');
+      fetchFeedback();
+    }
+
+    function openPopup() {
+      document.getElementById('popup').classList.remove('hidden');
+    }
+    function closePopup() {
+      document.getElementById('popup').classList.add('hidden');
+    }
+
+    function editFeedback(index) {
+      const newText = prompt('Edit your feedback:', feedbackList[index].feedback);
+      if (newText !== null) {
+        feedbackList[index].feedback = newText;
+        updateBin();
+      }
+    }
+
+    function deleteFeedback(index) {
+      if (confirm('Are you sure you want to delete your feedback?')) {
+        feedbackList.splice(index, 1);
+        updateBin();
+      }
+    }
+
+    async function updateBin() {
+      await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': masterKey
+        },
+        body: JSON.stringify(feedbackList)
+      });
+      fetchFeedback();
+    }
+
+    window.onload = () => {
+      feather.replace();
+      fetchFeedback();
+    }
+  </script></body>
+</html>

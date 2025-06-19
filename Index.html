@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en">
+<!-- Full Index.html with feedback integration --><!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,9 +25,27 @@
       opacity: 1;
       transform: translateY(0);
     }
+    .quote-box {
+      background-color: #fff7e6;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .quote-text {
+      font-style: italic;
+      color: #333;
+    }
+    .quote-author {
+      margin-top: 1rem;
+      font-weight: 600;
+      color: #92400e;
+      text-align: center;
+    }
   </style>
 </head>
-<body class="text-gray-900 overflow-x-hidden">  <!-- Intro Loader -->  <div id="intro" class="fixed inset-0 bg-yellow-200 z-50 flex items-center justify-center">
+<body class="text-gray-900 overflow-x-hidden">
+  <!-- Intro Loader -->
+  <div id="intro" class="fixed inset-0 bg-yellow-200 z-50 flex items-center justify-center">
     <img src="https://i.postimg.cc/DZZZ3yPq/Fezar-logo.png" alt="Fezar Logo" class="w-32 h-auto animate-pulse">
   </div>  <!-- Header -->  <header class="py-4 px-6 flex justify-center items-center relative z-10">
     <img src="https://i.postimg.cc/DZZZ3yPq/Fezar-logo.png" alt="Fezar Logo" class="w-20 h-auto">
@@ -50,10 +68,13 @@
       <h3 class="text-xl font-semibold mb-2">Trusted Ingredients</h3>
       <p class="text-gray-700">Only ripe bananas from trusted farms, blended with care and quality.</p>
     </div>
-  </section>  <!-- Feedback -->  <section class="bg-yellow-50 py-16 px-6 text-center scroll-animate invisible">
+  </section>  <!-- Feedback Display -->  <section class="bg-yellow-50 py-16 px-6 text-center scroll-animate invisible">
     <h2 class="text-3xl font-semibold mb-6">Customer Feedback</h2>
-    <p class="text-gray-600 mb-4 italic">We care about every voice. Let us know your experience with Fezar.</p>
-    <button onclick="openFeedbackPopup()" class="bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-full">Add Feedback</button>
+    <div id="topFeedbacks" class="space-y-4 max-w-3xl mx-auto"></div>
+    <button onclick="openFeedbackPopup()" class="bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 mt-6 rounded-full">Add Feedback</button>
+    <div class="mt-4">
+      <a href="feedback.html" class="text-yellow-700 font-semibold underline">Explore all Feedback</a>
+    </div>
   </section>  <!-- Contact Us -->  <section class="bg-yellow-100 py-12 px-6 text-center scroll-animate invisible">
     <h2 class="text-2xl font-semibold mb-4">Contact Us</h2>
     <div class="flex justify-center gap-8 text-yellow-800 text-xl">
@@ -83,6 +104,24 @@
       <button onclick="closeFeedbackPopup()" class="ml-4 text-sm text-gray-500 hover:text-black">Cancel</button>
     </div>
   </div>  <script>
+    const feedbackBinId = '6852e5f08960c979a5ac4735';
+    const feedbackMasterKey = '$2a$10$MUqYJOcR3EgBFDfSAss.Ku2/OaZAatavYTIK1GZRp.u4glSMb5NXK';
+
+    async function loadPopularFeedback() {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${feedbackBinId}/latest`, {
+        headers: { 'X-Master-Key': feedbackMasterKey }
+      });
+      const json = await res.json();
+      const feedbacks = json.record || [];
+      const top3 = feedbacks.sort((a, b) => b.feedback.length - a.feedback.length).slice(0, 3);
+      document.getElementById('topFeedbacks').innerHTML = top3.map(f => `
+        <div class='quote-box'>
+          <p class='quote-text'>"${f.feedback}"</p>
+          <p class='quote-author'>– ${f.name || 'Anonymous'}</p>
+        </div>
+      `).join('');
+    }
+
     window.addEventListener('load', () => {
       setTimeout(() => {
         document.getElementById('intro').style.display = 'none';
@@ -91,6 +130,7 @@
           el.classList.add('visible');
         });
         feather.replace();
+        loadPopularFeedback();
       }, 2000);
     });
 
